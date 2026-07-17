@@ -21,23 +21,23 @@ const ORBITAL_DATA = [
 
 /* ─── TOKENS ─────────────────────────────────────────────── */
 const C = {
-  bg:       "#F8F9FF",
+  bg:       "#FAFAFA",
   bgCard:   "#ffffff",
-  bgCream:  "#F0F2FF",
-  purple:   "#1A1AFF",
-  purpleM:  "#5555FF",
-  purpleL:  "#EEEEFF",
-  purpleT:  "#AAAAFF",
+  bgCream:  "#FFF5F5",
+  purple:   "#D00000",   // rojo primario
+  purpleM:  "#FF2222",   // rojo brillante
+  purpleL:  "#FFEEEE",   // rojo muy claro (fills)
+  purpleT:  "#FF9999",   // rojo suave (líneas)
   green:    "#00E5A0",
-  text:     "#0A0A2E",
-  textMid:  "#2A2A6E",
-  textMut:  "#6666CC",
-  border:   "#E0E0FF",
-  borderM:  "rgba(26,26,255,0.2)",
-  wa:       "#F0F2FF",
-  waBotBg:  "#1A1AFF",
+  text:     "#0A0A0A",
+  textMid:  "#3A3A3A",
+  textMut:  "#888888",
+  border:   "#F0E8E8",
+  borderM:  "rgba(208,0,0,0.18)",
+  wa:       "#FFF5F5",
+  waBotBg:  "#D00000",
   waCliBg:  "#ffffff",
-  waCliTx:  "#0A0A2E",
+  waCliTx:  "#0A0A0A",
   waBotTx:  "#ffffff",
 };
 
@@ -63,7 +63,7 @@ const Logotype = ({ onDark = false, size = 26 }: { onDark?: boolean; size?: numb
     <Logo size={size} />
     <span style={{ fontFamily:"'Space Grotesk',sans-serif", fontWeight:700, fontSize:size*0.65, letterSpacing:"-0.02em", lineHeight:1 }}>
       <span style={{ color: onDark ? "#ffffff" : C.text }}>red</span>
-      <span style={{ color: onDark ? C.purpleT : C.purple }}>42</span>
+      <span style={{ color: onDark ? "#FF9999" : C.purple }}>42</span>
     </span>
   </div>
 );
@@ -129,7 +129,7 @@ function T({ text, bot }: { text:string; bot?:boolean }) {
   return (
     <>
       {text.split(/(\*\*[^*]+\*\*|_[^_]+_|\n)/g).map((p,i)=>{
-        if (p.startsWith("**") && p.endsWith("**")) return <strong key={i} style={{color: bot ? "#AAAAFF" : C.purple}}>{p.slice(2,-2)}</strong>;
+        if (p.startsWith("**") && p.endsWith("**")) return <strong key={i} style={{color: bot ? "#FF9999" : C.purple}}>{p.slice(2,-2)}</strong>;
         if (p.startsWith("_")  && p.endsWith("_"))  return <em key={i} style={{opacity:.75,fontStyle:"italic"}}>{p.slice(1,-1)}</em>;
         if (p==="\n") return <br key={i}/>;
         return p;
@@ -165,9 +165,9 @@ function ChatDemo({ tab }: { tab:Tab }) {
   useEffect(()=>{ endRef.current?.scrollIntoView({behavior:"smooth",block:"nearest"}); },[count]);
 
   return (
-    <div style={{background:"#0A0A2E",borderRadius:36,padding:10,boxShadow:"0 32px 64px rgba(10,10,46,.3)",maxWidth:320,margin:"0 auto"}}>
+    <div style={{background:"#0A0A0A",borderRadius:36,padding:10,boxShadow:"0 32px 64px rgba(10,10,46,.3)",maxWidth:320,margin:"0 auto"}}>
       <div style={{background:C.waCliBg,borderRadius:28,overflow:"hidden"}}>
-        <div style={{background:"#0A0A2E",height:28,display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <div style={{background:"#0A0A0A",height:28,display:"flex",alignItems:"center",justifyContent:"center"}}>
           <div style={{width:60,height:6,background:"rgba(255,255,255,.15)",borderRadius:3}}/>
         </div>
         <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
@@ -283,7 +283,7 @@ export default function Home() {
           breathingRange={5}
           startingGap={80}
           topOffset={0}
-          gradientColors={["#0A0A2E","#12125A","#1A1AFF","#5555FF","#AAAAFF","#E0E0FF","#F8F9FF"]}
+          gradientColors={["#0A0A0A","#1A0000","#D00000","#FF2222","#FF9999","#FFE8E8","#FAFAFA"]}
           gradientStops={[20,38,55,67,78,90,100]}
           containerStyle={{opacity:0.9}}
         />
@@ -295,7 +295,7 @@ export default function Home() {
             </div>
             <h1 className="hero-h1" style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:700,fontSize:50,lineHeight:1.1,color:"#ffffff",marginBottom:20}}>
               Automatiza. Integra. Escala.{" "}
-              <span style={{color:"#AAAAFF"}}>Con inteligencia artificial.</span>
+              <span style={{color:"#FF9999"}}>Con inteligencia artificial.</span>
             </h1>
             <p style={{fontSize:17,color:"rgba(255,255,255,0.82)",lineHeight:1.7,marginBottom:36,maxWidth:520,fontFamily:"'Hanken Grotesk',sans-serif"}}>
               Red42 diseña e implementa soluciones de IA para empresas que quieren dejar de perder tiempo en tareas repetitivas y empezar a operar a otra escala.
@@ -322,9 +322,9 @@ export default function Home() {
 
           {/* PHONE MOCKUP HERO */}
           <div className="hero-phone-col" style={{display:"flex",justifyContent:"center"}}>
-            <div style={{background:"#0A0A2E",borderRadius:36,padding:10,boxShadow:"0 32px 80px rgba(10,10,46,.25)"}}>
+            <div style={{background:"#0A0A0A",borderRadius:36,padding:10,boxShadow:"0 32px 80px rgba(10,10,46,.25)"}}>
               <div style={{background:C.waCliBg,borderRadius:28,overflow:"hidden",width:280}}>
-                <div style={{background:"#0A0A2E",height:28,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <div style={{background:"#0A0A0A",height:28,display:"flex",alignItems:"center",justifyContent:"center"}}>
                   <div style={{width:60,height:6,background:"rgba(255,255,255,.15)",borderRadius:3}}/>
                 </div>
                 <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
@@ -343,7 +343,7 @@ export default function Home() {
                   </div>
                   <div style={{display:"flex",justifyContent:"flex-end"}}>
                     <div style={{background:C.waBotBg,borderRadius:"14px 14px 3px 14px",padding:"8px 11px",fontSize:11,color:"#fff",maxWidth:"80%"}}>
-                      Perfecto. Cuéntame más y te preparo una propuesta en <strong style={{color:"#AAAAFF"}}>24 horas</strong>.
+                      Perfecto. Cuéntame más y te preparo una propuesta en <strong style={{color:"#FF9999"}}>24 horas</strong>.
                     </div>
                   </div>
                   <div style={{display:"flex",justifyContent:"flex-start"}}>
@@ -353,7 +353,7 @@ export default function Home() {
                   </div>
                   <div style={{display:"flex",justifyContent:"flex-end"}}>
                     <div style={{background:C.waBotBg,borderRadius:"14px 14px 3px 14px",padding:"8px 11px",fontSize:11,color:"#fff",maxWidth:"80%"}}>
-                      ✅ Entendido. Nuestros clientes ahorran <strong style={{color:"#AAAAFF"}}>-60% de tiempo</strong> en las primeras 2 semanas.
+                      ✅ Entendido. Nuestros clientes ahorran <strong style={{color:"#FF9999"}}>-60% de tiempo</strong> en las primeras 2 semanas.
                     </div>
                   </div>
                   <div style={{background:C.bgCard,borderRadius:12,padding:"10px 12px",border:`1px solid ${C.border}`,marginTop:4}}>
@@ -419,15 +419,15 @@ export default function Home() {
       </section>
 
       {/* ORBITAL — SERVICIOS */}
-      <section className="section-pad" style={{padding:"80px 6%",background:"#0A0A2E",overflow:"hidden"}}>
+      <section className="section-pad" style={{padding:"80px 6%",background:"#0A0A0A",overflow:"hidden"}}>
         <div className="orbital-flex" style={{maxWidth:1100,margin:"0 auto",display:"flex",alignItems:"center",gap:60}}>
           <div className="orbital-col-left" style={{flex:"0 0 380px",minWidth:0}}>
-            <p style={{fontSize:10,fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"#5555FF",marginBottom:16}}>lo que hacemos</p>
+            <p style={{fontSize:10,fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"#FF2222",marginBottom:16}}>lo que hacemos</p>
             <h2 style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:38,color:"#ffffff",marginBottom:20,lineHeight:1.15}}>
               Tu red de IA,{" "}
-              <span style={{color:"#AAAAFF"}}>diseñada a medida.</span>
+              <span style={{color:"#FF9999"}}>diseñada a medida.</span>
             </h2>
-            <p style={{fontSize:15,color:"rgba(170,170,255,.75)",lineHeight:1.75,marginBottom:36}}>
+            <p style={{fontSize:15,color:"rgba(255,200,200,.75)",lineHeight:1.75,marginBottom:36}}>
               Red42 no es una herramienta. Es un equipo que entiende tu negocio, diseña la solución correcta y la opera contigo.
             </p>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
@@ -438,9 +438,9 @@ export default function Home() {
                 {label:"Análisis e inteligencia",    desc:"Convertimos tus datos en decisiones más rápidas y precisas."},
                 {label:"Formación y adopción",       desc:"Tu equipo aprende a trabajar con IA desde el primer día."},
               ].map(({label,desc})=>(
-                <div key={label} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(85,85,255,.25)",borderLeft:"3px solid #5555FF",borderRadius:10,padding:"12px 16px"}}>
+                <div key={label} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(208,0,0,.25)",borderLeft:"3px solid #5555FF",borderRadius:10,padding:"12px 16px"}}>
                   <p style={{color:"#ffffff",fontWeight:700,fontSize:13,margin:"0 0 3px",fontFamily:"'Bricolage Grotesque',sans-serif"}}>{label}</p>
-                  <p style={{color:"rgba(170,170,255,.7)",fontSize:12,margin:0,lineHeight:1.55}}>{desc}</p>
+                  <p style={{color:"rgba(255,200,200,.7)",fontSize:12,margin:0,lineHeight:1.55}}>{desc}</p>
                 </div>
               ))}
             </div>
@@ -463,12 +463,12 @@ export default function Home() {
           </p>
           <BentoGridShowcase
             integration={
-              <div style={{background:"#0A0A2E",border:"1px solid rgba(26,26,255,.3)",borderRadius:16,padding:28,display:"flex",flexDirection:"column",boxSizing:"border-box",height:"100%"}}>
-                <div style={{width:48,height:48,borderRadius:12,background:"rgba(26,26,255,.25)",border:"1px solid rgba(26,26,255,.4)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,flexShrink:0}}>
+              <div style={{background:"#0A0A0A",border:"1px solid rgba(208,0,0,.3)",borderRadius:16,padding:28,display:"flex",flexDirection:"column",boxSizing:"border-box",height:"100%"}}>
+                <div style={{width:48,height:48,borderRadius:12,background:"rgba(208,0,0,.25)",border:"1px solid rgba(208,0,0,.4)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,flexShrink:0}}>
                   <Logo size={28}/>
                 </div>
                 <p style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:20,color:"#ffffff",marginBottom:12}}>Red42 conectado a tu negocio</p>
-                <p style={{fontSize:13,color:"rgba(170,170,255,.75)",lineHeight:1.7,flex:1}}>
+                <p style={{fontSize:13,color:"rgba(255,200,200,.75)",lineHeight:1.7,flex:1}}>
                   Analizamos tu operación, diseñamos la solución IA y la integramos en tu stack existente. Sin disrupciones, sin fricciones.
                 </p>
                 <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:24}}>
@@ -479,8 +479,8 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:24,paddingTop:20,borderTop:"1px solid rgba(26,26,255,.2)"}}>
-                  <span style={{fontSize:11,color:"rgba(170,170,255,.6)",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase"}}>Estado</span>
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:24,paddingTop:20,borderTop:"1px solid rgba(208,0,0,.2)"}}>
+                  <span style={{fontSize:11,color:"rgba(255,200,200,.6)",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase"}}>Estado</span>
                   <span style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:C.green,fontWeight:700}}>
                     <span style={{width:7,height:7,borderRadius:"50%",background:C.green,display:"inline-block"}}/>
                     Activo
@@ -499,11 +499,11 @@ export default function Home() {
               </div>
             }
             statistic={
-              <div style={{background:"#0A0A2E",border:"1px solid rgba(26,26,255,.3)",borderRadius:16,height:"100%",minHeight:160,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative",boxSizing:"border-box"}}>
+              <div style={{background:"#0A0A0A",border:"1px solid rgba(208,0,0,.3)",borderRadius:16,height:"100%",minHeight:160,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative",boxSizing:"border-box"}}>
                 <div style={{position:"absolute",inset:0,opacity:.08,backgroundImage:"radial-gradient(rgba(170,170,255,1) 1px, transparent 1px)",backgroundSize:"18px 18px"}}/>
                 <div style={{textAlign:"center",position:"relative",zIndex:1}}>
                   <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:72,color:"#ffffff",lineHeight:1}}>-60%</div>
-                  <p style={{fontSize:12,color:"rgba(170,170,255,.7)",marginTop:6}}>tiempo en tareas manuales</p>
+                  <p style={{fontSize:12,color:"rgba(255,200,200,.7)",marginTop:6}}>tiempo en tareas manuales</p>
                 </div>
               </div>
             }
@@ -524,10 +524,10 @@ export default function Home() {
               </div>
             }
             productivity={
-              <div style={{background:"#0A0A2E",border:"1px solid rgba(26,26,255,.3)",borderRadius:16,padding:24,height:"100%",minHeight:160,display:"flex",flexDirection:"column",justifyContent:"flex-end",boxSizing:"border-box"}}>
+              <div style={{background:"#0A0A0A",border:"1px solid rgba(208,0,0,.3)",borderRadius:16,padding:24,height:"100%",minHeight:160,display:"flex",flexDirection:"column",justifyContent:"flex-end",boxSizing:"border-box"}}>
                 <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:42,color:C.green,marginBottom:8,lineHeight:1}}>+40%</div>
                 <p style={{fontSize:13,fontWeight:700,color:"#ffffff",marginBottom:6}}>capacidad operativa sin contratar</p>
-                <p style={{fontSize:12,color:"rgba(170,170,255,.65)",lineHeight:1.5}}>Tu equipo produce más con el mismo tamaño gracias a la IA.</p>
+                <p style={{fontSize:12,color:"rgba(255,200,200,.65)",lineHeight:1.5}}>Tu equipo produce más con el mismo tamaño gracias a la IA.</p>
               </div>
             }
             shortcuts={

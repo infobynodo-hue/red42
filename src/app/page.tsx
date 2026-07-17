@@ -500,7 +500,7 @@ export default function Home() {
             }
             statistic={
               <div style={{background:"#0A0A0A",border:"1px solid rgba(208,0,0,.3)",borderRadius:16,height:"100%",minHeight:160,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative",boxSizing:"border-box"}}>
-                <div style={{position:"absolute",inset:0,opacity:.08,backgroundImage:"radial-gradient(rgba(170,170,255,1) 1px, transparent 1px)",backgroundSize:"18px 18px"}}/>
+                <div style={{position:"absolute",inset:0,opacity:.08,backgroundImage:"radial-gradient(rgba(208,0,0,1) 1px, transparent 1px)",backgroundSize:"18px 18px"}}/>
                 <div style={{textAlign:"center",position:"relative",zIndex:1}}>
                   <div style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:72,color:"#ffffff",lineHeight:1}}>-60%</div>
                   <p style={{fontSize:12,color:"rgba(255,200,200,.7)",marginTop:6}}>tiempo en tareas manuales</p>

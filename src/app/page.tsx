@@ -68,6 +68,59 @@ const Logotype = ({ onDark = false, size = 26 }: { onDark?: boolean; size?: numb
   </div>
 );
 
+/* ─── iPHONE FRAME ──────────────────────────────────────── */
+const IPhoneFrame = ({ children, width = 280 }: { children: React.ReactNode; width?: number }) => {
+  const h = Math.round(width * (844 / 390)); // proporción real iPhone
+  const r = Math.round(width * 0.138);       // border-radius proporcional (~54px en 390)
+  const cam = Math.round(width * 0.282);     // ancho Dynamic Island (~110px en 390)
+  return (
+    <div style={{
+      position:"relative",
+      width,
+      height:h,
+      borderRadius:r,
+      background:"linear-gradient(145deg,#2c2c2e 0%,#1c1c1e 50%,#111 100%)",
+      padding:3,
+      boxShadow:[
+        "0 0 0 1px rgba(255,255,255,.10)",
+        "0 0 0 2px rgba(0,0,0,.8)",
+        "inset 0 1px 0 rgba(255,255,255,.14)",
+        "0 40px 80px rgba(0,0,0,.65)",
+        "0 16px 32px rgba(208,0,0,.10)",
+      ].join(","),
+      flexShrink:0,
+    }}>
+      {/* Titanio highlight */}
+      <div style={{position:"absolute",inset:0,borderRadius:r,background:"linear-gradient(130deg,rgba(255,255,255,.13) 0%,transparent 38%,transparent 62%,rgba(255,255,255,.05) 100%)",pointerEvents:"none",zIndex:20}}/>
+      {/* Botón silencio */}
+      <div style={{position:"absolute",left:-3,top:Math.round(h*.135),width:3,height:Math.round(h*.042),borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#3a3a3c,#2c2c2e)"}}/>
+      {/* Botón volumen ↑ */}
+      <div style={{position:"absolute",left:-3,top:Math.round(h*.205),width:3,height:Math.round(h*.074),borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#3a3a3c,#2c2c2e)"}}/>
+      {/* Botón volumen ↓ */}
+      <div style={{position:"absolute",left:-3,top:Math.round(h*.292),width:3,height:Math.round(h*.074),borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#3a3a3c,#2c2c2e)"}}/>
+      {/* Botón encendido */}
+      <div style={{position:"absolute",right:-3,top:Math.round(h*.205),width:3,height:Math.round(h*.104),borderRadius:"0 3px 3px 0",background:"linear-gradient(180deg,#3a3a3c,#2c2c2e)"}}/>
+      {/* Pantalla */}
+      <div style={{borderRadius:r-3,overflow:"hidden",width:"100%",height:"100%",position:"relative",background:"#fff"}}>
+        {/* Dynamic Island — solo la píldora, sin íconos */}
+        <div style={{
+          position:"absolute",top:12,left:"50%",transform:"translateX(-50%)",
+          width:cam,height:Math.round(width*.077),
+          background:"#000",borderRadius:999,
+          zIndex:10,
+          boxShadow:"0 0 0 1px rgba(255,255,255,.06), 0 2px 8px rgba(0,0,0,.6)",
+        }}/>
+        {/* Contenido */}
+        <div style={{paddingTop:Math.round(width*.077)+20,height:"100%",boxSizing:"border-box",display:"flex",flexDirection:"column"}}>
+          {children}
+        </div>
+        {/* Home indicator */}
+        <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",width:Math.round(width*.308),height:5,background:"rgba(0,0,0,.18)",borderRadius:3}}/>
+      </div>
+    </div>
+  );
+};
+
 /* ─── TIPOS ─────────────────────────────────────────────── */
 type MsgType = "text" | "audio" | "image" | "bot" | "typing";
 type Msg = { id:number; side:"left"|"right"; type:MsgType; text?:string; time?:string };
@@ -165,21 +218,20 @@ function ChatDemo({ tab }: { tab:Tab }) {
   useEffect(()=>{ endRef.current?.scrollIntoView({behavior:"smooth",block:"nearest"}); },[count]);
 
   return (
-    <div style={{background:"#0A0A0A",borderRadius:36,padding:10,boxShadow:"0 32px 64px rgba(10,10,46,.3)",maxWidth:320,margin:"0 auto"}}>
-      <div style={{background:C.waCliBg,borderRadius:28,overflow:"hidden"}}>
-        <div style={{background:"#0A0A0A",height:28,display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <div style={{width:60,height:6,background:"rgba(255,255,255,.15)",borderRadius:3}}/>
-        </div>
-        <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
-          <Logo size={34}/>
+    <div style={{display:"flex",justifyContent:"center",margin:"0 auto"}}>
+      <IPhoneFrame width={290}>
+        {/* App bar */}
+        <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
+          <Logo size={32}/>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:600,color:"#fff"}}>{CH_NAME[tab]}</div>
             <div style={{fontSize:10,color:"rgba(255,255,255,.65)"}}>en línea</div>
           </div>
           <div style={{background:"rgba(255,255,255,.2)",color:"#fff",fontSize:8,fontWeight:700,letterSpacing:".08em",padding:"2px 8px",borderRadius:999,textTransform:"uppercase"}}>en vivo</div>
         </div>
-        <div style={{background:C.wa,padding:12,minHeight:280,maxHeight:340,overflowY:"auto",display:"flex",flexDirection:"column",gap:8}}>
-          <div style={{textAlign:"center",fontSize:9,color:C.textMut,background:"rgba(26,26,255,.08)",borderRadius:8,padding:"2px 10px",alignSelf:"center",marginBottom:4}}>Hoy</div>
+        {/* Messages */}
+        <div style={{background:C.wa,padding:12,flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:8}}>
+          <div style={{textAlign:"center",fontSize:9,color:C.textMut,background:"rgba(0,0,0,.06)",borderRadius:8,padding:"2px 10px",alignSelf:"center",marginBottom:4}}>Hoy</div>
           {msgs.slice(0,count).map((msg,idx,arr)=>{
             if (msg.type==="typing"){
               const next=arr[idx+1];
@@ -201,16 +253,14 @@ function ChatDemo({ tab }: { tab:Tab }) {
           })}
           <div ref={endRef}/>
         </div>
-        <div style={{background:"#fff",padding:"8px 12px",display:"flex",alignItems:"center",gap:8,borderTop:`1px solid ${C.border}`}}>
+        {/* Input */}
+        <div style={{background:"#fff",padding:"8px 12px",display:"flex",alignItems:"center",gap:8,borderTop:`1px solid ${C.border}`,flexShrink:0}}>
           <div style={{flex:1,background:C.bgCream,borderRadius:20,padding:"7px 14px",fontSize:11,color:C.textMut}}>Escribe un mensaje...</div>
-          <div style={{width:30,height:30,borderRadius:"50%",background:C.purple,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div style={{width:30,height:30,borderRadius:"50%",background:C.purple,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
             <span style={{fontSize:12,color:"#fff"}}>↑</span>
           </div>
         </div>
-        <div style={{background:"#fff",height:20,display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <div style={{width:48,height:4,background:"rgba(0,0,0,.15)",borderRadius:2}}/>
-        </div>
-      </div>
+      </IPhoneFrame>
     </div>
   );
 }
@@ -322,110 +372,49 @@ export default function Home() {
 
           {/* PHONE MOCKUP HERO */}
           <div className="hero-phone-col" style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-            {/* iPhone 17 frame */}
-            <div style={{
-              position:"relative",
-              width:300,
-              borderRadius:52,
-              background:"linear-gradient(160deg,#2a2a2a 0%,#1a1a1a 40%,#111 100%)",
-              padding:"3px",
-              boxShadow:"0 0 0 1px rgba(255,255,255,.08), 0 40px 100px rgba(0,0,0,.7), 0 20px 40px rgba(208,0,0,.12), inset 0 1px 0 rgba(255,255,255,.12)",
-            }}>
-              {/* Titanium rim highlight */}
-              <div style={{
-                position:"absolute",inset:0,borderRadius:52,
-                background:"linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 40%,transparent 60%,rgba(255,255,255,.06) 100%)",
-                pointerEvents:"none",zIndex:10,
-              }}/>
-              {/* Side buttons left */}
-              <div style={{position:"absolute",left:-3,top:110,width:3,height:36,borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#333,#222)",boxShadow:"-1px 0 3px rgba(0,0,0,.5)"}}/>
-              <div style={{position:"absolute",left:-3,top:158,width:3,height:60,borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#333,#222)",boxShadow:"-1px 0 3px rgba(0,0,0,.5)"}}/>
-              <div style={{position:"absolute",left:-3,top:228,width:3,height:60,borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#333,#222)",boxShadow:"-1px 0 3px rgba(0,0,0,.5)"}}/>
-              {/* Side button right (power) */}
-              <div style={{position:"absolute",right:-3,top:158,width:3,height:80,borderRadius:"0 3px 3px 0",background:"linear-gradient(180deg,#333,#222)",boxShadow:"1px 0 3px rgba(0,0,0,.5)"}}/>
-
-              {/* Screen */}
-              <div style={{background:C.waCliBg,borderRadius:50,overflow:"hidden",width:"100%"}}>
-                {/* Status bar + Dynamic Island */}
-                <div style={{background:"#0A0A0A",height:52,display:"flex",alignItems:"flex-end",justifyContent:"center",paddingBottom:8,position:"relative"}}>
-                  {/* Status bar items */}
-                  <div style={{position:"absolute",top:14,left:20,fontSize:10,fontWeight:700,color:"#fff",letterSpacing:".02em"}}>9:41</div>
-                  <div style={{position:"absolute",top:14,right:16,display:"flex",gap:5,alignItems:"center"}}>
-                    <svg width="16" height="10" viewBox="0 0 16 10" fill="white" opacity=".9"><rect x="0" y="3" width="3" height="7" rx="1"/><rect x="4.5" y="2" width="3" height="8" rx="1"/><rect x="9" y="0" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2" height="10" rx="1" opacity=".3"/></svg>
-                    <svg width="14" height="10" viewBox="0 0 14 10" fill="white" opacity=".9"><path d="M7 2.5C9.2 2.5 11.2 3.4 12.6 4.9L14 3.5C12.2 1.3 9.8 0 7 0S1.8 1.3 0 3.5L1.4 4.9C2.8 3.4 4.8 2.5 7 2.5z"/><path d="M7 5.5C8.4 5.5 9.7 6.1 10.6 7.1L12 5.7C10.7 4.3 8.9 3.5 7 3.5S3.3 4.3 2 5.7L3.4 7.1C4.3 6.1 5.6 5.5 7 5.5z"/><circle cx="7" cy="9" r="1.5"/></svg>
-                    <div style={{display:"flex",alignItems:"center",gap:2}}>
-                      <div style={{width:22,height:11,borderRadius:3,border:"1.5px solid rgba(255,255,255,.5)",padding:1.5,display:"flex",alignItems:"center"}}>
-                        <div style={{width:"75%",height:"100%",background:"#00E5A0",borderRadius:1.5}}/>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Dynamic Island */}
-                  <div style={{
-                    width:110,height:30,
-                    background:"#000",
-                    borderRadius:20,
-                    display:"flex",alignItems:"center",justifyContent:"space-between",
-                    padding:"0 10px",
-                    boxShadow:"0 0 0 1px rgba(255,255,255,.05)",
-                  }}>
-                    <div style={{width:10,height:10,borderRadius:"50%",background:"#1a1a1a",border:"1px solid rgba(255,255,255,.07)"}}/>
-                    <div style={{width:16,height:16,borderRadius:"50%",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)"}}/>
-                  </div>
+            <IPhoneFrame width={270}>
+              {/* App bar */}
+              <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
+                <Logo size={30}/>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:12,fontWeight:600,color:"#fff"}}>Red42</div>
+                  <div style={{fontSize:10,color:"rgba(255,255,255,.6)"}}>en línea</div>
                 </div>
-                <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
-                  <Logo size={32}/>
-                  <div style={{flex:1}}>
-                    <div style={{fontSize:12,fontWeight:600,color:"#fff"}}>Red42</div>
-                    <div style={{fontSize:10,color:"rgba(255,255,255,.6)"}}>en línea</div>
+                <div style={{background:"rgba(255,255,255,.2)",color:"#fff",fontSize:8,fontWeight:700,padding:"2px 7px",borderRadius:999,textTransform:"uppercase"}}>LIVE</div>
+              </div>
+              {/* Chat */}
+              <div style={{background:C.wa,padding:10,display:"flex",flexDirection:"column",gap:7,flex:1,overflowY:"hidden"}}>
+                {[
+                  {r:false,t:"Hola, quiero automatizar nuestro proceso de ventas con IA."},
+                  {r:true, t:<>Perfecto. Te preparo una propuesta en <strong style={{color:"#FF9999"}}>24 horas</strong>.</>},
+                  {r:false,t:"Queremos reducir el tiempo en tareas repetitivas."},
+                  {r:true, t:<>✅ Nuestros clientes ahorran <strong style={{color:"#FF9999"}}>-60% de tiempo</strong> en 2 semanas.</>},
+                ].map((m,i)=>(
+                  <div key={i} style={{display:"flex",justifyContent:m.r?"flex-end":"flex-start"}}>
+                    <div style={{background:m.r?C.waBotBg:C.waCliBg,borderRadius:m.r?"13px 13px 3px 13px":"13px 13px 13px 3px",padding:"7px 10px",fontSize:10,color:m.r?"#fff":C.waCliTx,maxWidth:"82%",boxShadow:m.r?"none":"0 1px 3px rgba(0,0,0,.07)",lineHeight:1.45}}>{m.t}</div>
                   </div>
-                  <div style={{background:"rgba(255,255,255,.2)",color:"#fff",fontSize:8,fontWeight:700,padding:"2px 7px",borderRadius:999,textTransform:"uppercase"}}>LIVE</div>
+                ))}
+                <div style={{background:C.bgCard,borderRadius:10,padding:"8px 10px",border:`1px solid ${C.border}`,marginTop:2}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                    <span style={{fontSize:9,fontWeight:600,color:C.text}}>Propuesta · IA</span>
+                    <span style={{background:C.purpleL,color:C.purple,fontSize:7,fontWeight:700,padding:"1px 5px",borderRadius:999}}>IA</span>
+                  </div>
+                  {[{n:"Automatización",v:"12 h/sem"},{n:"Agente IA",v:"24/7"},{n:"Dashboard",v:"Tiempo real"}].map((r,i)=>(
+                    <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"3px 0",borderTop:i>0?`1px solid ${C.border}`:"none"}}>
+                      <span style={{fontSize:9,color:C.text}}>{r.n}</span>
+                      <span style={{fontSize:9,fontWeight:600,color:C.purple}}>{r.v}</span>
+                    </div>
+                  ))}
                 </div>
-                <div style={{background:C.wa,padding:12,display:"flex",flexDirection:"column",gap:8}}>
-                  <div style={{display:"flex",justifyContent:"flex-start"}}>
-                    <div style={{background:C.waCliBg,borderRadius:"14px 14px 14px 3px",padding:"8px 11px",fontSize:11,color:C.waCliTx,maxWidth:"80%",boxShadow:"0 1px 3px rgba(0,0,0,.07)"}}>
-                      Hola, quiero automatizar nuestro proceso de ventas con IA.
-                    </div>
-                  </div>
-                  <div style={{display:"flex",justifyContent:"flex-end"}}>
-                    <div style={{background:C.waBotBg,borderRadius:"14px 14px 3px 14px",padding:"8px 11px",fontSize:11,color:"#fff",maxWidth:"80%"}}>
-                      Perfecto. Cuéntame más y te preparo una propuesta en <strong style={{color:"#FF9999"}}>24 horas</strong>.
-                    </div>
-                  </div>
-                  <div style={{display:"flex",justifyContent:"flex-start"}}>
-                    <div style={{background:C.waCliBg,borderRadius:"14px 14px 14px 3px",padding:"8px 11px",fontSize:11,color:C.waCliTx,boxShadow:"0 1px 3px rgba(0,0,0,.07)"}}>
-                      Queremos reducir el tiempo en tareas repetitivas.
-                    </div>
-                  </div>
-                  <div style={{display:"flex",justifyContent:"flex-end"}}>
-                    <div style={{background:C.waBotBg,borderRadius:"14px 14px 3px 14px",padding:"8px 11px",fontSize:11,color:"#fff",maxWidth:"80%"}}>
-                      ✅ Entendido. Nuestros clientes ahorran <strong style={{color:"#FF9999"}}>-60% de tiempo</strong> en las primeras 2 semanas.
-                    </div>
-                  </div>
-                  <div style={{background:C.bgCard,borderRadius:12,padding:"10px 12px",border:`1px solid ${C.border}`,marginTop:4}}>
-                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                      <span style={{fontSize:10,fontWeight:600,color:C.text}}>Propuesta · Generada por IA</span>
-                      <span style={{background:C.purpleL,color:C.purple,fontSize:8,fontWeight:700,padding:"2px 6px",borderRadius:999}}>IA</span>
-                    </div>
-                    {[{n:"Automatización de procesos",v:"12 h/semana"},{n:"Agente IA personalizado",v:"24/7 activo"},{n:"Dashboard de resultados",v:"Tiempo real"}].map((r,i)=>(
-                      <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"4px 0",borderTop: i>0 ? `1px solid ${C.border}` : "none"}}>
-                        <span style={{fontSize:10,fontWeight:500,color:C.text}}>{r.n}</span>
-                        <span style={{fontSize:10,fontWeight:600,color:C.purple}}>{r.v}</span>
-                      </div>
-                    ))}
-                  </div>
+              </div>
+              {/* Input */}
+              <div style={{background:"#fff",padding:"7px 10px",display:"flex",alignItems:"center",gap:7,borderTop:`1px solid ${C.border}`,flexShrink:0}}>
+                <div style={{flex:1,background:C.bgCream,borderRadius:20,padding:"5px 10px",fontSize:9,color:C.textMut}}>Escribe un mensaje...</div>
+                <div style={{width:24,height:24,borderRadius:"50%",background:C.purple,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <span style={{fontSize:10,color:"#fff"}}>↑</span>
                 </div>
-                <div style={{background:"#fff",padding:"8px 12px",display:"flex",alignItems:"center",gap:8,borderTop:`1px solid ${C.border}`}}>
-                  <div style={{flex:1,background:C.bgCream,borderRadius:20,padding:"6px 12px",fontSize:10,color:C.textMut}}>Escribe un mensaje...</div>
-                  <div style={{width:28,height:28,borderRadius:"50%",background:C.purple,display:"flex",alignItems:"center",justifyContent:"center"}}>
-                    <span style={{fontSize:11,color:"#fff"}}>↑</span>
-                  </div>
-                </div>
-                {/* Home indicator */}
-                <div style={{background:C.waCliBg,height:28,display:"flex",alignItems:"center",justifyContent:"center",paddingBottom:6}}>
-                  <div style={{width:120,height:5,background:"rgba(0,0,0,.18)",borderRadius:3}}/>
-                </div>
-              </div>{/* /screen */}
-            </div>{/* /titanium frame */}
+              </div>
+            </IPhoneFrame>
           </div>
         </div>
       </section>

@@ -438,7 +438,7 @@ export default function Home() {
                 {label:"Análisis e inteligencia",    desc:"Convertimos tus datos en decisiones más rápidas y precisas."},
                 {label:"Formación y adopción",       desc:"Tu equipo aprende a trabajar con IA desde el primer día."},
               ].map(({label,desc})=>(
-                <div key={label} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(208,0,0,.25)",borderLeft:"3px solid #5555FF",borderRadius:10,padding:"12px 16px"}}>
+                <div key={label} style={{background:"rgba(255,255,255,.05)",border:"1px solid rgba(208,0,0,.25)",borderLeft:`3px solid ${C.purple}`,borderRadius:10,padding:"12px 16px"}}>
                   <p style={{color:"#ffffff",fontWeight:700,fontSize:13,margin:"0 0 3px",fontFamily:"'Bricolage Grotesque',sans-serif"}}>{label}</p>
                   <p style={{color:"rgba(255,200,200,.7)",fontSize:12,margin:0,lineHeight:1.55}}>{desc}</p>
                 </div>

@@ -321,11 +321,56 @@ export default function Home() {
           </div>
 
           {/* PHONE MOCKUP HERO */}
-          <div className="hero-phone-col" style={{display:"flex",justifyContent:"center"}}>
-            <div style={{background:"#0A0A0A",borderRadius:36,padding:10,boxShadow:"0 32px 80px rgba(10,10,46,.25)"}}>
-              <div style={{background:C.waCliBg,borderRadius:28,overflow:"hidden",width:280}}>
-                <div style={{background:"#0A0A0A",height:28,display:"flex",alignItems:"center",justifyContent:"center"}}>
-                  <div style={{width:60,height:6,background:"rgba(255,255,255,.15)",borderRadius:3}}/>
+          <div className="hero-phone-col" style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+            {/* iPhone 17 frame */}
+            <div style={{
+              position:"relative",
+              width:300,
+              borderRadius:52,
+              background:"linear-gradient(160deg,#2a2a2a 0%,#1a1a1a 40%,#111 100%)",
+              padding:"3px",
+              boxShadow:"0 0 0 1px rgba(255,255,255,.08), 0 40px 100px rgba(0,0,0,.7), 0 20px 40px rgba(208,0,0,.12), inset 0 1px 0 rgba(255,255,255,.12)",
+            }}>
+              {/* Titanium rim highlight */}
+              <div style={{
+                position:"absolute",inset:0,borderRadius:52,
+                background:"linear-gradient(135deg,rgba(255,255,255,.18) 0%,transparent 40%,transparent 60%,rgba(255,255,255,.06) 100%)",
+                pointerEvents:"none",zIndex:10,
+              }}/>
+              {/* Side buttons left */}
+              <div style={{position:"absolute",left:-3,top:110,width:3,height:36,borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#333,#222)",boxShadow:"-1px 0 3px rgba(0,0,0,.5)"}}/>
+              <div style={{position:"absolute",left:-3,top:158,width:3,height:60,borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#333,#222)",boxShadow:"-1px 0 3px rgba(0,0,0,.5)"}}/>
+              <div style={{position:"absolute",left:-3,top:228,width:3,height:60,borderRadius:"3px 0 0 3px",background:"linear-gradient(180deg,#333,#222)",boxShadow:"-1px 0 3px rgba(0,0,0,.5)"}}/>
+              {/* Side button right (power) */}
+              <div style={{position:"absolute",right:-3,top:158,width:3,height:80,borderRadius:"0 3px 3px 0",background:"linear-gradient(180deg,#333,#222)",boxShadow:"1px 0 3px rgba(0,0,0,.5)"}}/>
+
+              {/* Screen */}
+              <div style={{background:C.waCliBg,borderRadius:50,overflow:"hidden",width:"100%"}}>
+                {/* Status bar + Dynamic Island */}
+                <div style={{background:"#0A0A0A",height:52,display:"flex",alignItems:"flex-end",justifyContent:"center",paddingBottom:8,position:"relative"}}>
+                  {/* Status bar items */}
+                  <div style={{position:"absolute",top:14,left:20,fontSize:10,fontWeight:700,color:"#fff",letterSpacing:".02em"}}>9:41</div>
+                  <div style={{position:"absolute",top:14,right:16,display:"flex",gap:5,alignItems:"center"}}>
+                    <svg width="16" height="10" viewBox="0 0 16 10" fill="white" opacity=".9"><rect x="0" y="3" width="3" height="7" rx="1"/><rect x="4.5" y="2" width="3" height="8" rx="1"/><rect x="9" y="0" width="3" height="10" rx="1"/><rect x="13.5" y="0" width="2" height="10" rx="1" opacity=".3"/></svg>
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="white" opacity=".9"><path d="M7 2.5C9.2 2.5 11.2 3.4 12.6 4.9L14 3.5C12.2 1.3 9.8 0 7 0S1.8 1.3 0 3.5L1.4 4.9C2.8 3.4 4.8 2.5 7 2.5z"/><path d="M7 5.5C8.4 5.5 9.7 6.1 10.6 7.1L12 5.7C10.7 4.3 8.9 3.5 7 3.5S3.3 4.3 2 5.7L3.4 7.1C4.3 6.1 5.6 5.5 7 5.5z"/><circle cx="7" cy="9" r="1.5"/></svg>
+                    <div style={{display:"flex",alignItems:"center",gap:2}}>
+                      <div style={{width:22,height:11,borderRadius:3,border:"1.5px solid rgba(255,255,255,.5)",padding:1.5,display:"flex",alignItems:"center"}}>
+                        <div style={{width:"75%",height:"100%",background:"#00E5A0",borderRadius:1.5}}/>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Dynamic Island */}
+                  <div style={{
+                    width:110,height:30,
+                    background:"#000",
+                    borderRadius:20,
+                    display:"flex",alignItems:"center",justifyContent:"space-between",
+                    padding:"0 10px",
+                    boxShadow:"0 0 0 1px rgba(255,255,255,.05)",
+                  }}>
+                    <div style={{width:10,height:10,borderRadius:"50%",background:"#1a1a1a",border:"1px solid rgba(255,255,255,.07)"}}/>
+                    <div style={{width:16,height:16,borderRadius:"50%",background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.06)"}}/>
+                  </div>
                 </div>
                 <div style={{background:C.purple,padding:"10px 14px",display:"flex",alignItems:"center",gap:10}}>
                   <Logo size={32}/>
@@ -375,11 +420,12 @@ export default function Home() {
                     <span style={{fontSize:11,color:"#fff"}}>↑</span>
                   </div>
                 </div>
-                <div style={{background:"#fff",height:20,display:"flex",alignItems:"center",justifyContent:"center"}}>
-                  <div style={{width:48,height:4,background:"rgba(0,0,0,.12)",borderRadius:2}}/>
+                {/* Home indicator */}
+                <div style={{background:C.waCliBg,height:28,display:"flex",alignItems:"center",justifyContent:"center",paddingBottom:6}}>
+                  <div style={{width:120,height:5,background:"rgba(0,0,0,.18)",borderRadius:3}}/>
                 </div>
-              </div>
-            </div>
+              </div>{/* /screen */}
+            </div>{/* /titanium frame */}
           </div>
         </div>
       </section>

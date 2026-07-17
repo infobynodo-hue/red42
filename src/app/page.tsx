@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import { BentoGridShowcase } from "@/components/ui/bento-product-features";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import {
   Zap, BarChart2, Users, RefreshCw, Bell, TrendingUp, ShoppingCart
 } from "lucide-react";
@@ -269,7 +270,9 @@ export default function Home() {
             <a key={l} href="#" style={{fontSize:13,color:C.textMut,fontWeight:500,textDecoration:"none"}}>{l}</a>
           ))}
         </div>
-        <a href="#" style={{background:C.purple,color:"#fff",borderRadius:8,padding:"8px 18px",fontSize:13,fontWeight:600,textDecoration:"none"}}>Hablar con Red42</a>
+        <LiquidButton size="sm" style={{background:C.purple,color:"#fff",fontSize:13,fontWeight:700} as React.CSSProperties}>
+          Hablar con Red42
+        </LiquidButton>
       </nav>
 
       {/* HERO */}
@@ -308,9 +311,12 @@ export default function Home() {
                   <input placeholder="Nombre empresa" style={{width:"100%",padding:"10px 12px",borderRadius:9,border:`1px solid ${C.border}`,fontSize:13,color:C.text,background:C.bgCream,outline:"none",fontFamily:"inherit"}}/>
                 </div>
               </div>
-              <button style={{width:"100%",background:C.purple,color:"#fff",borderRadius:10,padding:"12px",fontSize:14,fontWeight:700,border:"none",cursor:"pointer",fontFamily:"'Bricolage Grotesque',sans-serif"}}>
+              <LiquidButton
+                size="lg"
+                style={{width:"100%",background:C.purple,color:"#fff",fontFamily:"'Bricolage Grotesque',sans-serif",fontSize:14,fontWeight:700} as React.CSSProperties}
+              >
                 Solicitar sesión estratégica →
-              </button>
+              </LiquidButton>
             </div>
           </div>
 
@@ -400,9 +406,9 @@ export default function Home() {
           </p>
           <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:36}}>
             {TABS.map(t=>(
-              <button key={t} onClick={()=>setTab(t)} style={{padding:"9px 22px",borderRadius:999,border: tab===t ? "none" : `1.5px solid ${C.borderM}`,background: tab===t ? C.purple : "transparent",color: tab===t ? "#fff" : C.textMid,fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",transition:"all .15s"}}>
+              <LiquidButton key={t} onClick={()=>setTab(t)} size="sm" style={{padding:"9px 22px",borderRadius:999,border: tab===t ? "none" : `1.5px solid ${C.borderM}`,background: tab===t ? C.purple : "transparent",color: tab===t ? "#fff" : C.textMid,fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",transition:"all .15s"} as React.CSSProperties}>
                 {t}
-              </button>
+              </LiquidButton>
             ))}
           </div>
           <div className="demo-grid" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:40,alignItems:"start"}}>
@@ -649,9 +655,12 @@ export default function Home() {
             ¿Listo para operar a otra <span style={{color:C.purple}}>escala?</span>
           </h2>
           <p style={{fontSize:15,color:C.textMid,marginBottom:32}}>Primera sesión estratégica gratuita. Sin compromisos.</p>
-          <a href="#" style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:C.purple,color:"#fff",borderRadius:14,padding:"16px 36px",fontSize:16,fontWeight:700,textDecoration:"none",display:"inline-block"}}>
+          <LiquidButton
+            size="xxl"
+            style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:C.purple,color:"#fff",fontSize:16,fontWeight:700} as React.CSSProperties}
+          >
             Hablar con Red42 →
-          </a>
+          </LiquidButton>
         </div>
       </section>
 

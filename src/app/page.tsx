@@ -665,14 +665,112 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{padding:"28px 6%",borderTop:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:16,background:C.bgCard}}>
-        <Logotype size={22}/>
-        <div style={{display:"flex",gap:20}}>
-          {["Servicios","Casos de uso","Stack","Privacidad","Términos"].map(l=>(
-            <a key={l} href="#" style={{fontSize:12,color:C.textMut,textDecoration:"none"}}>{l}</a>
-          ))}
+      {/* ── FOOTER ── */}
+      <footer style={{position:"relative",zIndex:10,marginTop:0,width:"100%",overflow:"hidden",paddingTop:64,paddingBottom:32,background:"#0A0A0A"}}>
+        {/* Glow blobs */}
+        <div style={{pointerEvents:"none",position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:"100%",height:"100%",zIndex:0}}>
+          <div style={{position:"absolute",top:-80,left:"20%",width:260,height:260,borderRadius:"50%",background:"rgba(208,0,0,.15)",filter:"blur(72px)"}}/>
+          <div style={{position:"absolute",bottom:-60,right:"20%",width:300,height:300,borderRadius:"50%",background:"rgba(208,0,0,.12)",filter:"blur(80px)"}}/>
         </div>
-        <p style={{fontSize:11,color:C.textMut,margin:0}}>© 2026 Red42. Todos los derechos reservados.</p>
+
+        {/* Glass card */}
+        <div style={{
+          position:"relative",margin:"0 auto",maxWidth:1100,
+          backdropFilter:"blur(12px) saturate(160%)",
+          background:"radial-gradient(circle, rgba(255,255,255,.04) 0%, rgba(30,0,0,.10) 60%, rgba(10,0,0,.95) 100%)",
+          border:"1px solid rgba(208,0,0,.18)",
+          borderRadius:20,padding:"40px 40px 32px",
+          display:"flex",flexDirection:"column",gap:40,
+        }}>
+          {/* Top row */}
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:32,flexWrap:"wrap"}} className="footer-grid">
+
+            {/* Brand */}
+            <div style={{display:"flex",flexDirection:"column",gap:16}}>
+              <Logotype size={26} onDark/>
+              <p style={{fontSize:13,color:"rgba(255,255,255,.45)",lineHeight:1.7,margin:0,maxWidth:220}}>
+                Automatizamos y escalamos negocios con IA. Desde agentes hasta infraestructura completa.
+              </p>
+              {/* Social */}
+              <div style={{display:"flex",gap:14,marginTop:4}}>
+                {[
+                  {label:"LinkedIn", path:"M19 0h-14a5 5 0 00-5 5v14a5 5 0 005 5h14a5 5 0 005-5v-14a5 5 0 00-5-5zm-11 19h-3v-9h3zm-1.5-10.268a1.752 1.752 0 110-3.505 1.752 1.752 0 010 3.505zm15.5 10.268h-3v-4.5c0-1.07-.02-2.45-1.492-2.45-1.495 0-1.725 1.166-1.725 2.372v4.578h-3v-9h2.88v1.23h.04a3.157 3.157 0 012.847-1.568c3.042 0 3.605 2.003 3.605 4.612v4.726z"},
+                  {label:"Twitter/X", path:"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"},
+                  {label:"Instagram", path:"M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"},
+                ].map(({label,path})=>(
+                  <a key={label} href="#" aria-label={label} style={{color:"rgba(208,0,0,.7)",transition:"color .2s"}}
+                    onMouseEnter={e=>(e.currentTarget.style.color="#FF2222")}
+                    onMouseLeave={e=>(e.currentTarget.style.color="rgba(208,0,0,.7)")}>
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d={path}/></svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Servicios */}
+            <div>
+              <p style={{fontSize:11,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"#D00000",marginBottom:20,margin:"0 0 20px"}}>Servicios</p>
+              <ul style={{listStyle:"none",padding:0,margin:0,display:"flex",flexDirection:"column",gap:12}}>
+                {["Automatización de procesos","Agentes IA personalizados","Integración de sistemas","Análisis e inteligencia","Formación y adopción"].map(s=>(
+                  <li key={s}><a href="#" style={{fontSize:13,color:"rgba(255,255,255,.45)",textDecoration:"none",transition:"color .2s"}}
+                    onMouseEnter={e=>(e.currentTarget.style.color="#fff")}
+                    onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,.45)")}>{s}</a></li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Empresa */}
+            <div>
+              <p style={{fontSize:11,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"#D00000",marginBottom:20,margin:"0 0 20px"}}>Empresa</p>
+              <ul style={{listStyle:"none",padding:0,margin:0,display:"flex",flexDirection:"column",gap:12}}>
+                {["Sobre Red42","Casos de éxito","Stack tecnológico","Blog","Trabaja con nosotros"].map(s=>(
+                  <li key={s}><a href="#" style={{fontSize:13,color:"rgba(255,255,255,.45)",textDecoration:"none",transition:"color .2s"}}
+                    onMouseEnter={e=>(e.currentTarget.style.color="#fff")}
+                    onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,.45)")}>{s}</a></li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contacto */}
+            <div>
+              <p style={{fontSize:11,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"#D00000",marginBottom:20,margin:"0 0 20px"}}>Contacto</p>
+              <ul style={{listStyle:"none",padding:0,margin:0,display:"flex",flexDirection:"column",gap:14}}>
+                {[
+                  {icon:"M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z", text:"hola@red42.ai"},
+                  {icon:"M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z", text:"+34 600 000 000"},
+                  {icon:"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z", text:"España · Remoto"},
+                ].map(({icon,text})=>(
+                  <li key={text} style={{display:"flex",alignItems:"center",gap:10}}>
+                    <svg width="16" height="16" fill="none" stroke="#D00000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d={icon}/></svg>
+                    <span style={{fontSize:13,color:"rgba(255,255,255,.45)"}}>{text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div style={{borderTop:"1px solid rgba(208,0,0,.15)",paddingTop:24,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+            <p style={{fontSize:11,color:"rgba(255,255,255,.25)",margin:0}}>© 2026 Red42. Todos los derechos reservados.</p>
+            <div style={{display:"flex",gap:20}}>
+              {["Privacidad","Términos","Cookies"].map(l=>(
+                <a key={l} href="#" style={{fontSize:11,color:"rgba(255,255,255,.25)",textDecoration:"none",transition:"color .2s"}}
+                  onMouseEnter={e=>(e.currentTarget.style.color="rgba(255,255,255,.6)")}
+                  onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,.25)")}>{l}</a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Responsive styles */}
+        <style>{`
+          @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr 1fr !important; }
+          }
+          @media (max-width: 480px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </footer>
 
     </main>

@@ -879,6 +879,10 @@ export default function Home() {
 
       {/* RESPONSIVE STYLES */}
       <style>{`
+        @keyframes marquee-vertical-cta {
+          from { transform: translateY(0); }
+          to   { transform: translateY(-50%); }
+        }
         @keyframes typing { 0%,80%,100%{transform:scale(0.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
         @keyframes erp-spin-cw  { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         @keyframes erp-spin-ccw { from{transform:rotate(0deg)} to{transform:rotate(-360deg)} }
@@ -888,6 +892,8 @@ export default function Home() {
 
         @media (max-width: 900px) {
           .steps-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .cta-marquee-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .cta-marquee-h2 { font-size: 38px !important; }
           .bento-grid  { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto !important; }
           .bento-cell-1 { grid-column: 1/3 !important; grid-row: auto !important; min-height: 200px; }
           .bento-cell-2 { grid-column: 1   !important; grid-row: auto !important; min-height: 160px; }
@@ -908,6 +914,8 @@ export default function Home() {
           .orbital-col-left  { flex: none !important; width: 100% !important; max-width: 100% !important; }
           .orbital-col-right { display: none !important; }
           .steps-grid     { grid-template-columns: 1fr !important; }
+          .cta-marquee-col { display: none !important; }
+          .cta-marquee-h2 { font-size: 32px !important; }
           .erp-flex       { flex-direction: column !important; min-height: auto !important; gap: 32px !important; }
           .erp-col-left   { flex: none !important; width: 100% !important; max-width: 100% !important; }
           .erp-col-right  { display: none !important; }
@@ -949,19 +957,87 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section-pad" style={{padding:"80px 6%",borderTop:`1px solid ${C.border}`}}>
-        <div style={{maxWidth:560,margin:"0 auto",textAlign:"center"}}>
-          <h2 className="section-h2-lg" style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:40,color:C.text,marginBottom:16}}>
-            ¿Listo para operar a otra <span style={{color:C.purple}}>escala?</span>
-          </h2>
-          <p style={{fontSize:15,color:C.textMid,marginBottom:32}}>Primera sesión estratégica gratuita. Sin compromisos.</p>
-          <LiquidButton
-            size="xxl"
-            style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:C.purple,color:"#fff",fontSize:16,fontWeight:700} as React.CSSProperties}
-          >
-            Hablar con Red42 →
-          </LiquidButton>
+      {/* CTA — MARQUEE */}
+      <section style={{background:"#0A0A0A",padding:"80px 6%",overflow:"hidden",borderTop:"1px solid rgba(208,0,0,.12)"}}>
+        <div style={{maxWidth:1100,margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"80px",alignItems:"center"}} className="cta-marquee-grid">
+
+          {/* Left: copy */}
+          <div>
+            <p style={{fontSize:10,fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"rgba(208,0,0,.8)",marginBottom:20}}>empieza hoy</p>
+            <h2 style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:52,color:"#ffffff",lineHeight:1.1,marginBottom:24}} className="cta-marquee-h2">
+              ¿Listo para operar a otra{" "}
+              <span style={{color:"#FF2222"}}>escala?</span>
+            </h2>
+            <p style={{fontSize:16,color:"rgba(255,200,200,.65)",lineHeight:1.75,marginBottom:40,maxWidth:440}}>
+              Primera sesión estratégica gratuita. Analizamos tu operación, identificamos los procesos con más impacto y te mostramos cómo automatizarlos. Sin compromisos.
+            </p>
+            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+              <LiquidButton
+                size="xl"
+                style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:C.purple,color:"#fff",fontSize:15,fontWeight:700,borderRadius:12} as React.CSSProperties}
+              >
+                Solicitar sesión gratuita →
+              </LiquidButton>
+              <LiquidButton
+                size="xl"
+                style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:"transparent",color:"rgba(255,255,255,.7)",fontSize:15,fontWeight:600,border:"1.5px solid rgba(255,255,255,.15)",borderRadius:12} as React.CSSProperties}
+              >
+                Ver casos de uso
+              </LiquidButton>
+            </div>
+          </div>
+
+          {/* Right: vertical marquee */}
+          <div style={{position:"relative",height:520,overflow:"hidden"}} className="cta-marquee-col">
+            {/* Top fade */}
+            <div style={{pointerEvents:"none",position:"absolute",top:0,left:0,right:0,height:160,background:"linear-gradient(to bottom, #0A0A0A, transparent)",zIndex:2}}/>
+            {/* Bottom fade */}
+            <div style={{pointerEvents:"none",position:"absolute",bottom:0,left:0,right:0,height:160,background:"linear-gradient(to top, #0A0A0A, transparent)",zIndex:2}}/>
+
+            {/* Scrolling list × 2 for infinite loop */}
+            <div style={{display:"flex",flexDirection:"column",animation:"marquee-vertical-cta 18s linear infinite"}}>
+              {[
+                "PyMEs en crecimiento",
+                "Equipos de 20-60 personas",
+                "Consultores que revenden IA",
+                "Directores de operaciones",
+                "Empresas del sector salud",
+                "Agencias de servicios",
+                "Startups que escalan",
+                "Equipos de ventas",
+                "Clínicas y consultorios",
+                "Gestores de proyectos",
+              ].concat([
+                "PyMEs en crecimiento",
+                "Equipos de 20-60 personas",
+                "Consultores que revenden IA",
+                "Directores de operaciones",
+                "Empresas del sector salud",
+                "Agencias de servicios",
+                "Startups que escalan",
+                "Equipos de ventas",
+                "Clínicas y consultorios",
+                "Gestores de proyectos",
+              ]).map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    fontSize: 46,
+                    fontWeight: 300,
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.25,
+                    padding: "14px 0",
+                    color: i % 10 === 2 ? "#FF4444" : i % 10 === 5 ? "#FF9999" : "rgba(255,255,255,.18)",
+                    fontFamily:"'Bricolage Grotesque',sans-serif",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 

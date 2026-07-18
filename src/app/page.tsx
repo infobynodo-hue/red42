@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
 import { BentoGridShowcase } from "@/components/ui/bento-product-features";
@@ -7,7 +7,10 @@ import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { LogoCarousel } from "@/components/ui/logo-carousel";
 import { GradientHeading } from "@/components/ui/gradient-heading";
 import {
-  Zap, BarChart2, Users, RefreshCw, Bell, TrendingUp, ShoppingCart
+  Zap, BarChart2, Users, RefreshCw, Bell, TrendingUp, ShoppingCart,
+  Calendar, FileText, FolderOpen, Target, Send, MessageCircle, Star,
+  Phone, BookOpen, Globe, ClipboardList, Brain, Receipt, Package,
+  Sun, UserPlus, ArrowDown, X,
 } from "lucide-react";
 import type { SVGProps } from "react";
 
@@ -21,6 +24,127 @@ const ORBITAL_DATA = [
   { id:6, title:"Servicio 06", date:"", content:"Descripción del sexto servicio o capacidad clave de Red42.", category:"Integración", icon:BarChart2, relatedIds:[1,5], status:"pending" as const, energy:60 },
   { id:7, title:"Servicio 07", date:"", content:"Descripción del séptimo servicio o capacidad clave de Red42.", category:"Estrategia", icon:ShoppingCart, relatedIds:[1,2], status:"pending" as const, energy:55 },
 ];
+
+/* ─── AUTOMATIZACIONES DATA ─────────────────────────────────── */
+type Area = 'admin' | 'ventas' | 'atencion' | 'interno';
+type ServiceItem = {
+  id: number; area: Area; icon: React.ElementType;
+  title: string; short: string;
+  trigger: string; steps: string[]; output: string; saving: string;
+};
+const AREA_LABELS: Record<Area, string> = {
+  admin: 'Administración', ventas: 'Ventas',
+  atencion: 'Atención al cliente', interno: 'Procesos internos',
+};
+const SERVICES: ServiceItem[] = [
+  // ADMINISTRACIÓN
+  { id:1,  area:'admin',    icon:Calendar,     title:'Gestión de agenda y citas',            short:'Agenda automática vía WhatsApp, sin intervención humana.',          trigger:'Cliente escribe pidiendo una cita o consulta.',                                   steps:['IA comprueba disponibilidad en el calendario en tiempo real.','Confirma el horario y envía detalles al cliente.','Envía recordatorio automático 24 h antes.','Gestiona cancelaciones y reagendados sin intervención.'],                                              output:'Cita confirmada, calendario actualizado y cliente informado.',               saving:'-8 h/semana' },
+  { id:2,  area:'admin',    icon:FileText,      title:'Ciclo de facturación automático',      short:'Facturas generadas, enviadas y registradas sin tocarlas.',           trigger:'Cierre de mes o hito de proyecto marcado como completado.',                       steps:['IA genera la factura personalizada con los datos del cliente.','La envía por email en formato PDF.','Registra el ingreso en el sistema contable.','Alerta al equipo si queda impagada a los 15 días.'],                                                         output:'Factura enviada, contabilizada y con seguimiento activo.',                   saving:'-6 h/mes' },
+  { id:3,  area:'admin',    icon:FolderOpen,    title:'Gestión documental inteligente',       short:'Documentos clasificados y almacenados automáticamente.',             trigger:'Empleado o cliente envía un documento por email o chat.',                         steps:['IA identifica el tipo de documento (contrato, factura, DNI…).','Lo clasifica y guarda en la carpeta correcta de Drive.','Notifica al responsable correspondiente.','Genera registro de auditoría con fecha y origen.'],                                          output:'Documento organizado y equipo notificado en segundos.',                     saving:'-5 h/semana' },
+  { id:4,  area:'admin',    icon:Calendar,      title:'Citas y agenda sector salud',          short:'Agenda de consultas médicas gestionada sola desde WhatsApp.',        trigger:'Paciente escribe o llama pidiendo consulta o cita médica.',                       steps:['IA comprueba la agenda del profesional en tiempo real.','Confirma la cita y envía instrucciones previas al paciente.','Recuerda la cita 24 h antes con indicaciones.','Gestiona cancelaciones y lista de espera automáticamente.'],                             output:'Agenda optimizada sin secretaria dedicada y cero citas perdidas.',           saving:'-90% llamadas' },
+  // VENTAS
+  { id:5,  area:'ventas',   icon:Target,        title:'Cualificación automática de leads',    short:'Solo llegan leads listos para hablar con ventas.',                   trigger:'Lead entra por formulario web, ads o referido.',                                  steps:['IA hace 3-5 preguntas clave de cualificación.','Puntúa el lead según presupuesto, urgencia y fit.','Si califica, agenda reunión con el comercial en tiempo real.','Si no califica, entra en secuencia de nurturing automático.'],                             output:'Reunión con lead cualificado en el calendario del comercial.',               saving:'+40% conversión' },
+  { id:6,  area:'ventas',   icon:Send,          title:'Generación de propuestas comerciales', short:'Propuesta profesional lista en minutos, no en horas.',               trigger:'Comercial rellena ficha básica del cliente tras la reunión.',                     steps:['IA redacta propuesta personalizada con el contexto del cliente.','Genera el PDF con el branding de la empresa.','Lo envía al cliente con enlace de firma digital.','Hace seguimiento automático a los 3 días si no hay respuesta.'],                           output:'Propuesta enviada y seguimiento activo sin esfuerzo del comercial.',         saving:'-3 h por propuesta' },
+  { id:7,  area:'ventas',   icon:RefreshCw,     title:'Recuperación de presupuestos fríos',   short:'Reactiva leads que dejaron de responder.',                           trigger:'Presupuesto sin respuesta después de 5 días.',                                    steps:['IA detecta presupuestos inactivos automáticamente.','Envía mensaje personalizado por el canal preferido del cliente.','Si abre el email, alerta al comercial para seguimiento inmediato.','Si no responde, lanza secuencia de 3 mensajes en 10 días.'],           output:'Lead reactivado o descartado con contexto completo para el equipo.',         saving:'+25% cierres' },
+  // ATENCIÓN AL CLIENTE
+  { id:8,  area:'atencion', icon:MessageCircle, title:'Soporte al cliente 24/7',              short:'Respuestas inmediatas a cualquier hora del día.',                    trigger:'Cliente pregunta por WhatsApp, web o email.',                                    steps:['IA analiza la consulta y busca en la base de conocimiento.','Responde en menos de 30 segundos con información precisa.','Si no puede resolver, escala al humano con todo el contexto.','Registra la interacción para mejorar futuras respuestas.'],               output:'Cliente atendido o escalado con contexto completo.',                         saving:'-70% tickets' },
+  { id:9,  area:'atencion', icon:Phone,         title:'Centralita IA telefónica',             short:'Nunca más una llamada sin respuesta.',                               trigger:'Cliente llama fuera de horario o con la línea ocupada.',                          steps:['IA responde y saluda con el nombre de la empresa.','Identifica el motivo: cita, información, queja, pedido…','Resuelve si puede (agenda, da información, registra pedido).','Deja resumen escrito y grabación al equipo para el día siguiente.'],              output:'Cliente atendido y cero llamadas perdidas.',                                 saving:'-100% llamadas perdidas' },
+  { id:10, area:'atencion', icon:RefreshCw,     title:'Seguimiento posventa automático',      short:'El cliente siente que te recuerdas de él tras la compra.',           trigger:'Venta o entrega de servicio finalizado.',                                         steps:['IA contacta al cliente a los 3 días para verificar satisfacción.','Si está satisfecho, solicita reseña y ofrece upsell relevante.','Si hay incidencia, abre ticket y alerta al equipo inmediatamente.','Registra el feedback para mejorar el servicio.'],      output:'Cliente fidelizado e incidencias detectadas en las primeras 72 horas.',     saving:'+30% retención' },
+  { id:11, area:'atencion', icon:BookOpen,      title:'Onboarding educativo automático',      short:'El cliente aprende a usar el producto sin llamadas de soporte.',     trigger:'Cliente nuevo acaba de contratar o realizar su primera compra.',                  steps:['IA envía secuencia educativa personalizada por WhatsApp o email.','Adapta el contenido y ritmo según las respuestas del cliente.','Responde dudas específicas en tiempo real durante el proceso.','Certifica la finalización y ofrece recursos avanzados.'],       output:'Cliente autónomo desde el primer día, sin soporte básico.',                 saving:'-80% soporte inicial' },
+  { id:12, area:'atencion', icon:Star,          title:'Gestión de reseñas y reputación',      short:'Reseñas positivas amplificadas, negativas gestionadas internamente.', trigger:'Cliente completa un servicio o recibe su pedido.',                                steps:['IA contacta al cliente con solicitud de valoración personalizada.','Si la valoración es 4-5★, redirige a Google o Trustpilot.','Si es 1-3★, abre incidencia interna y responde con empatía.','Genera informe mensual de reputación para el equipo directivo.'],  output:'Reputación online protegida y score medio en aumento constante.',            saving:'+4.6★ media' },
+  { id:13, area:'atencion', icon:Globe,         title:'Atención multicanal unificada',        short:'Todos los canales, una sola conversación coherente.',                trigger:'Cliente contacta por WhatsApp, Instagram DM, email o web.',                       steps:['IA unifica todos los mensajes en una sola bandeja de entrada.','Responde con el mismo contexto e historial en cada canal.','Evita respuestas duplicadas si el cliente escribe desde varios sitios.','El agente humano ve el hilo completo antes de intervenir.'],  output:'Experiencia coherente para el cliente sin importar el canal.',               saving:'-60% tiempo respuesta' },
+  // PROCESOS INTERNOS
+  { id:14, area:'interno',  icon:ClipboardList, title:'Actas automáticas de reunión',         short:'La reunión termina y las tareas ya están asignadas.',                trigger:'Reunión grabada o transcrita en Zoom, Meet o Teams.',                             steps:['IA procesa la transcripción y extrae decisiones clave.','Identifica tareas, responsables y fechas límite.','Envía el acta estructurada por email a todos los asistentes.','Crea las tareas en Notion, Asana o ClickUp automáticamente.'],                       output:'Tareas creadas y asignadas sin trabajo manual post-reunión.',                saving:'-3 h/semana' },
+  { id:15, area:'interno',  icon:Brain,         title:'Wiki interna con IA',                  short:'Cualquier empleado encuentra respuestas al instante.',               trigger:'Empleado hace una pregunta por Slack o Teams.',                                   steps:['IA consulta los manuales, SOPs y documentos de la empresa.','Responde con el contexto exacto y enlace al documento fuente.','Si no existe la respuesta, escala al experto y guarda la nueva.','Aprende con cada interacción y actualiza la base de conocimiento.'], output:'Respuesta en segundos y wiki actualizada automáticamente.',                  saving:'-5 h/semana' },
+  { id:16, area:'interno',  icon:ShoppingCart,  title:'Gestión de proveedores y compras',     short:'Pedidos tramitados sin papeleo ni emails manuales.',                 trigger:'Empleado solicita una compra por formulario interno.',                            steps:['IA comprueba el presupuesto disponible para esa categoría.','Si hay fondos, genera la orden de compra automáticamente.','Notifica al proveedor y registra el pedido en el sistema.','Actualiza la contabilidad cuando llega la factura del proveedor.'],          output:'Compra tramitada y contabilizada sin intervención del equipo.',              saving:'-4 h/semana' },
+  { id:17, area:'interno',  icon:Receipt,       title:'Aprobación automática de gastos',      short:'Tickets digitalizados y aprobados sin papeles.',                     trigger:'Empleado fotografía un ticket o recibo con su móvil.',                           steps:['IA extrae importe, categoría, proveedor y fecha del ticket.','Compara con la política de gastos de la empresa.','Aprueba automáticamente si cumple las reglas establecidas.','Escala al manager con contexto si supera el límite definido.'],                    output:'Gasto registrado y aprobado en menos de 2 minutos.',                        saving:'-6 h/mes por empleado' },
+  { id:18, area:'interno',  icon:Package,       title:'Control de stock e inventario',        short:'Nunca más quedarse sin producto clave.',                             trigger:'Stock de un producto cae por debajo del umbral mínimo.',                          steps:['IA detecta el nivel bajo y genera una propuesta de pedido.','Envía la propuesta al responsable para aprobación en un click.','Si se aprueba, lanza la orden de compra al proveedor.','Actualiza el inventario cuando llega la mercancía.'],                        output:'Stock repuesto sin intervención manual y sin roturas.',                      saving:'0 roturas de stock' },
+  { id:19, area:'interno',  icon:BarChart2,     title:'Actualización automática de proyectos', short:'Estado del proyecto siempre actualizado sin reuniones extra.',       trigger:'Cada viernes a las 16:00, configurado por el equipo.',                            steps:['IA envía mensaje a cada miembro preguntando el estado de sus tareas.','Consolida las respuestas en un informe estructurado.','Detecta bloqueos o retrasos y alerta al PM automáticamente.','Actualiza el tablero del proyecto con el nuevo estado.'],             output:'Informe de proyecto listo el viernes sin necesidad de reunión.',             saving:'-2 h/semana por proyecto' },
+  { id:20, area:'interno',  icon:Sun,           title:'Digest diario de equipo',              short:'El directivo empieza el día con el contexto completo.',             trigger:'Cada mañana a las 8:30.',                                                         steps:['IA consolida actividad del día anterior (emails, tareas, incidencias).','Organiza la información por área y nivel de urgencia.','Genera resumen ejecutivo con las 3-5 prioridades del día.','Lo envía al manager por WhatsApp o email antes de las 9:00.'],       output:'Manager informado y prioridades claras cada mañana en 2 minutos.',          saving:'-1 h/día directivo' },
+  { id:21, area:'interno',  icon:UserPlus,      title:'Onboarding de empleados',              short:'El primer mes de un nuevo empleado en piloto automático.',          trigger:'Nuevo empleado firma el contrato y es dado de alta en el sistema.',               steps:['IA crea los accesos a todas las herramientas según el rol.','Envía documentos de bienvenida y políticas de la empresa.','Agenda formaciones obligatorias y asigna un buddy del equipo.','Hace check-in automático al final de la semana 1 y semana 2.'],           output:'Empleado integrado y operativo desde el primer día sin carga para RRHH.',   saving:'-12 h por contratación' },
+];
+
+/* ─── FLOWCHART MODAL COMPONENT ─────────────────────────────── */
+function ServiceModal({ service, onClose }: { service: ServiceItem; onClose: () => void }) {
+  const Icon = service.icon;
+  return (
+    <div
+      style={{position:"fixed",inset:0,background:"rgba(0,0,0,.70)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem",backdropFilter:"blur(4px)"}}
+      onClick={onClose}
+    >
+      <div
+        style={{background:"#111",border:"1px solid rgba(208,0,0,.25)",borderRadius:20,maxWidth:480,width:"100%",maxHeight:"88vh",overflowY:"auto",position:"relative",boxShadow:"0 24px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(208,0,0,.12)"}}
+        onClick={e=>e.stopPropagation()}
+      >
+        {/* Close */}
+        <button onClick={onClose} style={{position:"absolute",top:14,right:14,width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,.08)",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",zIndex:1}}>
+          <X size={14}/>
+        </button>
+
+        {/* Header */}
+        <div style={{padding:"24px 24px 16px",borderBottom:"1px solid rgba(208,0,0,.12)"}}>
+          <div style={{width:40,height:40,borderRadius:10,background:"rgba(208,0,0,.2)",border:"1px solid rgba(208,0,0,.3)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:12}}>
+            <Icon size={20} color="#FF4444"/>
+          </div>
+          <div style={{fontSize:17,fontWeight:700,color:"#fff",marginBottom:4,fontFamily:"'Bricolage Grotesque',sans-serif"}}>{service.title}</div>
+          <div style={{fontSize:12,color:"rgba(208,0,0,.8)",fontWeight:500}}>{AREA_LABELS[service.area]}</div>
+        </div>
+
+        {/* Flowchart */}
+        <div style={{padding:"20px 24px 24px"}}>
+          {/* ENTRADA */}
+          <div style={{fontSize:9,fontWeight:700,letterSpacing:".12em",color:"rgba(208,0,0,.6)",textTransform:"uppercase",marginBottom:8}}>Entrada</div>
+          <div style={{padding:"11px 14px",borderRadius:10,background:"rgba(208,0,0,.12)",border:"1px solid rgba(208,0,0,.35)",display:"flex",alignItems:"flex-start",gap:10,marginBottom:0}}>
+            <div style={{width:7,height:7,borderRadius:"50%",background:"#D00000",flexShrink:0,marginTop:5}}/>
+            <span style={{fontSize:13,color:"rgba(255,255,255,.9)",lineHeight:1.45}}>{service.trigger}</span>
+          </div>
+
+          {/* Arrow */}
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"4px 0"}}>
+            <div style={{width:1,height:10,background:"rgba(208,0,0,.3)"}}/>
+            <ArrowDown size={12} color="rgba(208,0,0,.5)" style={{marginTop:-2}}/>
+          </div>
+
+          {/* PROCESO */}
+          <div style={{fontSize:9,fontWeight:700,letterSpacing:".12em",color:"rgba(255,255,255,.35)",textTransform:"uppercase",marginBottom:8}}>Proceso automatizado</div>
+          {service.steps.map((step, i) => (
+            <React.Fragment key={i}>
+              <div style={{padding:"10px 14px",borderRadius:10,background:"rgba(255,255,255,.05)",border:"1px solid rgba(208,0,0,.15)",display:"flex",alignItems:"flex-start",gap:10}}>
+                <div style={{width:20,height:20,borderRadius:"50%",background:"rgba(208,0,0,.35)",color:"#fff",fontSize:10,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{i+1}</div>
+                <span style={{fontSize:12,color:"rgba(255,255,255,.8)",lineHeight:1.45}}>{step}</span>
+              </div>
+              {i < service.steps.length - 1 && (
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"2px 0"}}>
+                  <div style={{width:1,height:8,background:"rgba(208,0,0,.2)"}}/>
+                  <ArrowDown size={10} color="rgba(208,0,0,.3)" style={{marginTop:-2}}/>
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+
+          {/* Arrow to output */}
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"4px 0"}}>
+            <div style={{width:1,height:10,background:"rgba(0,229,160,.3)"}}/>
+            <ArrowDown size={12} color="rgba(0,229,160,.5)" style={{marginTop:-2}}/>
+          </div>
+
+          {/* SALIDA */}
+          <div style={{fontSize:9,fontWeight:700,letterSpacing:".12em",color:"rgba(0,229,160,.7)",textTransform:"uppercase",marginBottom:8}}>Salida</div>
+          <div style={{padding:"11px 14px",borderRadius:10,background:"rgba(0,229,160,.08)",border:"1px solid rgba(0,229,160,.3)",display:"flex",alignItems:"flex-start",gap:10,marginBottom:16}}>
+            <div style={{width:7,height:7,borderRadius:"50%",background:"#00E5A0",flexShrink:0,marginTop:5}}/>
+            <span style={{fontSize:13,color:"rgba(0,229,160,.9)",lineHeight:1.45}}>{service.output}</span>
+          </div>
+
+          {/* Saving badge */}
+          <div style={{background:"rgba(208,0,0,.12)",border:"1px solid rgba(208,0,0,.25)",borderRadius:10,padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span style={{fontSize:11,color:"rgba(255,255,255,.5)",fontWeight:500}}>Impacto estimado</span>
+            <span style={{fontSize:16,fontWeight:700,color:"#FF4444",fontFamily:"'Bricolage Grotesque',sans-serif"}}>{service.saving}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ─── TOKENS ─────────────────────────────────────────────── */
 const C = {
@@ -391,6 +515,8 @@ const TECH_STACK = ["OpenAI","Anthropic","Langchain","n8n","Make","Supabase","Ve
 /* ─── PAGE ───────────────────────────────────────────────── */
 export default function Home() {
   const [tab, setTab] = useState<Tab>("Caso 01");
+  const [serviceArea, setServiceArea] = useState<Area | 'todos'>('todos');
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
 
   return (
     <main style={{background:C.bg,minHeight:"100vh"}}>
@@ -512,6 +638,60 @@ export default function Home() {
             Las mejores empresas ya están aquí
           </GradientHeading>
           <LogoCarousel columnCount={4} logos={CLIENT_LOGOS}/>
+        </div>
+      </section>
+
+      {/* AUTOMATIZACIONES */}
+      <section className="section-pad" style={{padding:"80px 6%",background:C.bg,borderTop:`1px solid ${C.border}`}}>
+        <div style={{maxWidth:1100,margin:"0 auto"}}>
+          <p style={{fontSize:10,fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:C.purple,marginBottom:12,textAlign:"center"}}>automatizaciones</p>
+          <h2 className="section-h2-lg" style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:38,color:C.text,textAlign:"center",marginBottom:10}}>
+            Procesos que eliminamos de tu día a día
+          </h2>
+          <p style={{fontSize:15,color:C.textMid,textAlign:"center",maxWidth:620,margin:"0 auto 36px",lineHeight:1.7}}>
+            Cada automatización tiene una entrada, un proceso IA y una salida medible. Haz clic en cualquiera para ver el flujo completo.
+          </p>
+
+          {/* Tabs por área */}
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center",marginBottom:36}}>
+            {(['todos', 'admin', 'ventas', 'atencion', 'interno'] as const).map(a => (
+              <button
+                key={a}
+                onClick={() => setServiceArea(a)}
+                style={{padding:"8px 18px",borderRadius:999,border: serviceArea===a ? "none" : `1.5px solid ${C.borderM}`,background: serviceArea===a ? C.purple : "transparent",color: serviceArea===a ? "#fff" : C.textMid,fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",transition:"all .15s"}}
+              >
+                {a === 'todos' ? 'Todos' : AREA_LABELS[a]}
+              </button>
+            ))}
+          </div>
+
+          {/* Cards grid */}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(220px,1fr))",gap:14}}>
+            {SERVICES.filter(s => serviceArea === 'todos' || s.area === serviceArea).map(s => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.id}
+                  onClick={() => setSelectedService(s)}
+                  style={{background:C.bgCard,border:`1px solid ${C.border}`,borderLeft:`3px solid ${C.purple}`,borderRadius:14,padding:"18px 16px",cursor:"pointer",transition:"all .2s",display:"flex",flexDirection:"column",gap:10}}
+                  onMouseEnter={e=>(e.currentTarget.style.boxShadow="0 6px 24px rgba(208,0,0,.12)",e.currentTarget.style.transform="translateY(-2px)")}
+                  onMouseLeave={e=>(e.currentTarget.style.boxShadow="none",e.currentTarget.style.transform="translateY(0)")}
+                >
+                  <div style={{width:34,height:34,borderRadius:8,background:C.purpleL,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                    <Icon size={18} color={C.purple}/>
+                  </div>
+                  <div>
+                    <div style={{fontSize:13,fontWeight:600,color:C.text,lineHeight:1.35,marginBottom:5}}>{s.title}</div>
+                    <div style={{fontSize:12,color:C.textMut,lineHeight:1.5}}>{s.short}</div>
+                  </div>
+                  <div style={{marginTop:"auto",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                    <span style={{fontSize:11,background:C.purpleL,color:C.purple,borderRadius:999,padding:"2px 10px",fontWeight:600}}>{s.saving}</span>
+                    <span style={{fontSize:11,color:C.textMut}}>Ver flujo →</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -784,6 +964,9 @@ export default function Home() {
           </LiquidButton>
         </div>
       </section>
+
+      {/* SERVICE MODAL */}
+      {selectedService && <ServiceModal service={selectedService} onClose={() => setSelectedService(null)}/>}
 
       {/* FOOTER */}
       {/* ── FOOTER ── */}

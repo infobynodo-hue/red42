@@ -64,6 +64,115 @@ const SERVICES: ServiceItem[] = [
   { id:21, area:'interno',  icon:UserPlus,      title:'Onboarding de empleados',              short:'El primer mes de un nuevo empleado en piloto automático.',          trigger:'Nuevo empleado firma el contrato y es dado de alta en el sistema.',               steps:['IA crea los accesos a todas las herramientas según el rol.','Envía documentos de bienvenida y políticas de la empresa.','Agenda formaciones obligatorias y asigna un buddy del equipo.','Hace check-in automático al final de la semana 1 y semana 2.'],           output:'Empleado integrado y operativo desde el primer día sin carga para RRHH.',   saving:'-12 h por contratación' },
 ];
 
+/* ─── CTA MARQUEE SECTION ───────────────────────────────────── */
+const CTA_ITEMS = [
+  "PyMEs en crecimiento",
+  "Equipos de 20 a 60 personas",
+  "Consultores que revenden IA",
+  "Directores de operaciones",
+  "Empresas del sector salud",
+  "Agencias de servicios",
+  "Startups que escalan",
+  "Equipos de ventas",
+  "Clínicas y consultorios",
+  "Gestores de proyectos",
+];
+
+function CtaMarqueeSection() {
+  const colRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const col = colRef.current;
+    if (!col) return;
+    const tick = () => {
+      const items = col.querySelectorAll<HTMLElement>(".cta-mq-item");
+      const rect = col.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2;
+      items.forEach(item => {
+        const r = item.getBoundingClientRect();
+        const dist = Math.abs(centerY - (r.top + r.height / 2));
+        const max = rect.height / 2;
+        const norm = Math.min(dist / max, 1);
+        const opacity = 1 - norm * 0.82;
+        item.style.opacity = String(opacity);
+        item.style.color = norm < 0.15 ? "#FF2222" : norm < 0.35 ? "#FF9999" : "#ffffff";
+      });
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  const doubled = [...CTA_ITEMS, ...CTA_ITEMS];
+
+  return (
+    <section style={{background:"#0A0A0A",padding:"80px 6%",overflow:"hidden",borderTop:"1px solid rgba(208,0,0,.12)"}}>
+      <div style={{maxWidth:1100,margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"80px",alignItems:"center"}} className="cta-marquee-grid">
+
+        {/* Left: copy */}
+        <div>
+          <p style={{fontSize:10,fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"rgba(208,0,0,.8)",marginBottom:20}}>empieza hoy</p>
+          <h2 style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:52,color:"#ffffff",lineHeight:1.1,marginBottom:24}} className="cta-marquee-h2">
+            ¿Listo para operar a otra{" "}
+            <span style={{color:"#FF2222"}}>escala?</span>
+          </h2>
+          <p style={{fontSize:16,color:"rgba(255,200,200,.65)",lineHeight:1.75,marginBottom:40,maxWidth:440}}>
+            Primera sesión estratégica gratuita. Analizamos tu operación, identificamos los procesos con más impacto y te mostramos cómo automatizarlos. Sin compromisos.
+          </p>
+          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+            <LiquidButton
+              size="xl"
+              style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:"#D00000",color:"#fff",fontSize:15,fontWeight:700,borderRadius:12} as React.CSSProperties}
+            >
+              Solicitar sesión gratuita →
+            </LiquidButton>
+            <LiquidButton
+              size="xl"
+              style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:"transparent",color:"rgba(255,255,255,.7)",fontSize:15,fontWeight:600,border:"1.5px solid rgba(255,255,255,.15)",borderRadius:12} as React.CSSProperties}
+            >
+              Ver casos de uso
+            </LiquidButton>
+          </div>
+        </div>
+
+        {/* Right: vertical marquee with dynamic center-focus */}
+        <div ref={colRef} style={{position:"relative",height:500,overflow:"hidden"}} className="cta-marquee-col">
+          {/* Top fade */}
+          <div style={{pointerEvents:"none",position:"absolute",top:0,left:0,right:0,height:140,background:"linear-gradient(to bottom,#0A0A0A,transparent)",zIndex:2}}/>
+          {/* Bottom fade */}
+          <div style={{pointerEvents:"none",position:"absolute",bottom:0,left:0,right:0,height:140,background:"linear-gradient(to top,#0A0A0A,transparent)",zIndex:2}}/>
+
+          {/* Scrolling track × 2 */}
+          <div style={{display:"flex",flexDirection:"column",animation:"marquee-vertical-cta 22s linear infinite"}}>
+            {doubled.map((item, i) => (
+              <div
+                key={i}
+                className="cta-mq-item"
+                style={{
+                  fontSize:32,
+                  fontWeight:300,
+                  letterSpacing:"-0.02em",
+                  lineHeight:1.3,
+                  padding:"13px 0",
+                  color:"#ffffff",
+                  fontFamily:"'Bricolage Grotesque',sans-serif",
+                  whiteSpace:"nowrap",
+                  transition:"color .15s",
+                  willChange:"opacity",
+                }}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
 /* ─── FLOWCHART MODAL COMPONENT ─────────────────────────────── */
 function ServiceModal({ service, onClose }: { service: ServiceItem; onClose: () => void }) {
   const Icon = service.icon;
@@ -958,88 +1067,7 @@ export default function Home() {
       </section>
 
       {/* CTA — MARQUEE */}
-      <section style={{background:"#0A0A0A",padding:"80px 6%",overflow:"hidden",borderTop:"1px solid rgba(208,0,0,.12)"}}>
-        <div style={{maxWidth:1100,margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"80px",alignItems:"center"}} className="cta-marquee-grid">
-
-          {/* Left: copy */}
-          <div>
-            <p style={{fontSize:10,fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"rgba(208,0,0,.8)",marginBottom:20}}>empieza hoy</p>
-            <h2 style={{fontFamily:"'Bricolage Grotesque',sans-serif",fontWeight:800,fontSize:52,color:"#ffffff",lineHeight:1.1,marginBottom:24}} className="cta-marquee-h2">
-              ¿Listo para operar a otra{" "}
-              <span style={{color:"#FF2222"}}>escala?</span>
-            </h2>
-            <p style={{fontSize:16,color:"rgba(255,200,200,.65)",lineHeight:1.75,marginBottom:40,maxWidth:440}}>
-              Primera sesión estratégica gratuita. Analizamos tu operación, identificamos los procesos con más impacto y te mostramos cómo automatizarlos. Sin compromisos.
-            </p>
-            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-              <LiquidButton
-                size="xl"
-                style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:C.purple,color:"#fff",fontSize:15,fontWeight:700,borderRadius:12} as React.CSSProperties}
-              >
-                Solicitar sesión gratuita →
-              </LiquidButton>
-              <LiquidButton
-                size="xl"
-                style={{fontFamily:"'Bricolage Grotesque',sans-serif",background:"transparent",color:"rgba(255,255,255,.7)",fontSize:15,fontWeight:600,border:"1.5px solid rgba(255,255,255,.15)",borderRadius:12} as React.CSSProperties}
-              >
-                Ver casos de uso
-              </LiquidButton>
-            </div>
-          </div>
-
-          {/* Right: vertical marquee */}
-          <div style={{position:"relative",height:520,overflow:"hidden"}} className="cta-marquee-col">
-            {/* Top fade */}
-            <div style={{pointerEvents:"none",position:"absolute",top:0,left:0,right:0,height:160,background:"linear-gradient(to bottom, #0A0A0A, transparent)",zIndex:2}}/>
-            {/* Bottom fade */}
-            <div style={{pointerEvents:"none",position:"absolute",bottom:0,left:0,right:0,height:160,background:"linear-gradient(to top, #0A0A0A, transparent)",zIndex:2}}/>
-
-            {/* Scrolling list × 2 for infinite loop */}
-            <div style={{display:"flex",flexDirection:"column",animation:"marquee-vertical-cta 18s linear infinite"}}>
-              {[
-                "PyMEs en crecimiento",
-                "Equipos de 20-60 personas",
-                "Consultores que revenden IA",
-                "Directores de operaciones",
-                "Empresas del sector salud",
-                "Agencias de servicios",
-                "Startups que escalan",
-                "Equipos de ventas",
-                "Clínicas y consultorios",
-                "Gestores de proyectos",
-              ].concat([
-                "PyMEs en crecimiento",
-                "Equipos de 20-60 personas",
-                "Consultores que revenden IA",
-                "Directores de operaciones",
-                "Empresas del sector salud",
-                "Agencias de servicios",
-                "Startups que escalan",
-                "Equipos de ventas",
-                "Clínicas y consultorios",
-                "Gestores de proyectos",
-              ]).map((item, i) => (
-                <div
-                  key={i}
-                  style={{
-                    fontSize: 46,
-                    fontWeight: 300,
-                    letterSpacing: "-0.02em",
-                    lineHeight: 1.25,
-                    padding: "14px 0",
-                    color: i % 10 === 2 ? "#FF4444" : i % 10 === 5 ? "#FF9999" : "rgba(255,255,255,.18)",
-                    fontFamily:"'Bricolage Grotesque',sans-serif",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
+      <CtaMarqueeSection />
 
       {/* SERVICE MODAL */}
       {selectedService && <ServiceModal service={selectedService} onClose={() => setSelectedService(null)}/>}

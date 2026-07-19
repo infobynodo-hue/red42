@@ -627,6 +627,8 @@ export default function Home() {
   const [serviceArea, setServiceArea] = useState<Area | 'todos'>('todos');
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
 
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   return (
     <main style={{background:C.bg,minHeight:"100vh"}}>
 
